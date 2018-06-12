@@ -2,29 +2,39 @@ const dynamoFunctions = require('./dynamoDB');
 const message = require('./messages');
 const training_data = require('./training_data');
 
-const params = {
-    TableName: 'handler_states',
-    Key:{ "handler_states_id": '0' }
-};
-
 module.exports = {
+    'Unhandled': function() {
+        this.emit(':ask', HELP_MESSAGE, HELP_MESSAGE);
+    },
     'LaunchRequest': function () {
+        console.log("Started LaunchRequest>>>>>>>>>>>>>>>>>>>>>");
+
         var speechOutput = message.LAUNCH_MESSAGE;
         const repromptOutput = message.LAUNCH_MESSAGE_REPROMPT;
-
         speechOutput = speechOutput;
+        //undefined
+        console.log(this.event.request.dialogState + '======DIALOGUE STATE');
 
         this.response.cardRenderer(message.SKILL_NAME, speechOutput);
         this.response.speak(speechOutput).listen(repromptOutput);
         this.emit(':responseReady');
     },
     'ExerciseIntent': function () {
+        var params = {
+            TableName: 'handler_states',
+              Key: {
+                'handler_states_id' : '0'
+              }
+        }
+        var level_state = '';
+        console.log("Started with invoce>>>>>>>>>>>>>>>>>>>>>");
         var bodypartExercisesJSON = training_data.BODYPART_EXERCISES;
-        dynamoFunctions.readDynamoItem(params, myResult=>{
-            console.log("DynamoDB>>>>>>>>>>>>>>>>>>>>>>"+ myResult);
+        dynamoFunctions.readDynamoItem(params, state=>{
+            level_state = state;
         });
 
         if (this.event.request.dialogState == "STARTED" || this.event.request.dialogState == "IN_PROGRESS"){
+            console.log('>>>>>>>>>>>>>>>> this.event.request.dialogState: '+this.event.request.dialogState)
             this.context.succeed({
                 "response": {
                     "directives": [
@@ -108,5 +118,28 @@ module.exports = {
     },
     'Unhandled': function () {
     this.emit(':ask',message.HELP_MESSAGE, message.HELP_REPROMPT);
+    }
+}
+
+function delegateSlotCollection(){
+  console.log("in delegateSlotCollection");
+  console.log("current dialogState: "+this.event.request.dialogState);
+    if (this.event.request.dialogState === "STARTED") {
+      console.log("in Beginning");
+      var updatedIntent=this.event.request.intent;
+      //optionally pre-fill slots: update the intent object with slot values for which
+      //you have defaults, then return Dialog.Delegate with this updated intent
+      // in the updatedIntent property
+      this.emit(":delegate", updatedIntent);
+    } else if (this.event.request.dialogState !== "COMPLETED") {
+      console.log("in not completed");
+      // return a Dialog.Delegate directive with no updatedIntent property.
+      this.emit(":delegate");
+    } else {
+      console.log("in completed");
+      console.log("returning: "+ JSON.stringify(this.event.request.intent));
+      // Dialog is now complete and all required slots should be filled,
+      // so call your normal intent handler.
+      return this.event.request.intent;
     }
 }

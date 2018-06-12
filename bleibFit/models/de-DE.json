@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "fit bleiben",
+      "invocationName": "theresas fitness app",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -48,7 +48,7 @@
             "Richtig",
             "Natürlich",
             "Sicher",
-            "Jawoll",
+            "Jawohl",
             "Ja"
           ]
         },
@@ -57,18 +57,25 @@
           "slots": [
             {
               "name": "trainieren",
-              "type": "trainingSlot"
+              "type": "trainingSlot",
+              "samples": [
+                "starte das Training",
+                "lasse uns trainieren",
+                "ich möchte beginnen zu trainieren",
+              ]
             },
             {
               "name": "bodypart",
               "type": "bodypartSlot",
               "samples": [
-                "meinen {bodypart}",
+                "meinen {bodypart} trainieren",
                 "am besten meinen {bodypart}",
                 "am besten meine {bodypart}",
                 "{trainieren} {bodypart}",
                 "lass uns {bodypart} {trainieren}",
                 "ich möchte {bodypart} {trainieren}",
+                "ich möchte meinen {bodypart} {trainieren}",
+                "ich möchte meine {bodypart} {trainieren}",
                 "am besten mein {bodypart}",
                 "meine {bodypart}",
                 "mein {bodypart}",
@@ -77,10 +84,10 @@
             }
           ],
           "samples": [
-            "{bodypart}",
-            "{trainieren}",
-            "ich möchte {bodypart} {trainieren}",
-            "{trainieren} {bodypart}"
+            "meinen {bodypart}",
+            "sage mir welches training ich machen könnte",
+            "ich möchte {bodypart} trainieren",
+            "{bodypart}"
           ]
         }
       ],
@@ -96,7 +103,8 @@
                   "Wirbelsäule",
                   "Rückgrat",
                   "Kreuz",
-                  "Rückgrad"
+                  "Rückgrad",
+                  "meinen Rücken"
                 ]
               }
             },
@@ -110,7 +118,8 @@
                   "Schultern",
                   "Unterarm",
                   "Oberarm",
-                  "Brust"
+                  "Brust",
+                  "meine Arme"
                 ]
               }
             },
@@ -123,7 +132,8 @@
                   "Core",
                   "Seitlichebauchmuskeln",
                   "Bauchmuskeln",
-                  "Belly"
+                  "Belly",
+                  "meinen Bauch"
                 ]
               }
             },
@@ -136,7 +146,8 @@
                   "Butt",
                   "Ass",
                   "Arsch",
-                  "Po"
+                  "Po",
+                  "meinen Hintern"
                 ]
               }
             },
@@ -145,10 +156,11 @@
               "name": {
                 "value": "Beine",
                 "synonyms": [
-                  "Oberschänkelmuskulatur",
+                  "Oberschenkelmuskulatur",
                   "Füße",
-                  "Oberschänkel",
-                  "Haxen"
+                  "Oberschenkel",
+                  "Haxen",
+                  "meine Beine"
                 ]
               }
             }
@@ -162,22 +174,13 @@
               "name": {
                 "value": "trainieren",
                 "synonyms": [
-                  "fitter werden",
-                  "fit bleiben",
                   "bewegen",
                   "aktivieren",
-                  "exercise",
                   "dehnen",
                   "betätigen",
-                  "abmühen",
                   "kräftigen",
-                  "drillen",
                   "schinden",
-                  "sportlich betätigen",
-                  "anstrengen",
-                  "probieren",
-                  "üben",
-                  "lernen"
+                  "sportlich betätigen"
                 ]
               }
             },
@@ -242,6 +245,10 @@
           {
             "type": "PlainText",
             "value": "Was möchtest du trainieren?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Bitte sage mir noch kurz welchen Körperteil du trainieren möchtest?"
           }
         ]
       },
@@ -250,19 +257,19 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "Alles klar, {bodypart} {trainieren} , stimmts?"
+            "value": "Alles klar, du möchtest ein {bodypart} Workout machen, stimmts?"
           },
           {
             "type": "PlainText",
-            "value": "Ok, habe ich das richtig verstanden du möchtest {bodypart} {trainieren} ?"
+            "value": "Ok, habe ich das richtig verstanden du möchtest ein {bodypart} Workout machen ?"
           },
           {
             "type": "PlainText",
-            "value": "Du möchtest {bodypart} trainieren, richtig?"
+            "value": "Du möchtest {bodypart} Übungen machen, richtig?"
           },
           {
             "type": "PlainText",
-            "value": "Du möchtest {bodypart} {trainieren} , richtig?"
+            "value": "Du möchtest {bodypart} Training machen , richtig?"
           }
         ]
       }
