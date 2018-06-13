@@ -16,16 +16,7 @@ module.exports = {
             this.emit(':ask', message.HELP_MESSAGE, message.HELP_MESSAGE);
           }
     },
-    'LaunchRequest': function () {
-        var speechOutput = message.LAUNCH_MESSAGE;
-        const repromptOutput = message.LAUNCH_MESSAGE_REPROMPT;
-        speechOutput = speechOutput;
-
-        this.response.cardRenderer(message.SKILL_NAME, speechOutput);
-        this.response.speak(speechOutput).listen(repromptOutput);
-        this.emit(':responseReady');
-    },
-    'ExerciseIntent': function () {
+    'ExerciseIntent'() {
         var uebungIndex = '';
         var randomExercise = '';
         var level_state = '';
@@ -56,14 +47,14 @@ module.exports = {
                 }
             }
 
-        // if (this.handler.state == ''){
-        //     this.handler.state = exercArr.length; 
-        // }
+            // if (this.handler.state == ''){
+            //     this.handler.state = exercArr.length; 
+            // }
 
-         // console.log('this handler stat' + this.handler.state);
+             // console.log('this handler stat' + this.handler.state);
 
 
-        exercArrIdx = 1;
+            exercArrIdx = 1;
 
             //create random index
             //uebungIndex = Math.floor(Math.random() * exercArr.length);
@@ -76,7 +67,6 @@ module.exports = {
             console.log("GET EXERCISE OUT OF JSON >>>>>>>>>>>>>>>>>>>>>" + JSON.stringify(bodypartExercisesJSON[bodypart_valid][excersiceName]));
 
             if (bodypartExercisesJSON[bodypart_valid][excersiceName] != undefined) {
-                console.log("Bodypart EXISTS and is going to be outputed");
                 const speechOutput = "Dein Training ist "+bodypartExercisesJSON[bodypart_valid][excersiceName].PrintName+". Wiederhole diese "+bodypartExercisesJSON[bodypart_valid][excersiceName].Repetitions;
                 this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
                 this.response.speak(speechOutput);
@@ -85,36 +75,36 @@ module.exports = {
             } 
         }
         else {
+            this.response.cardRenderer(message.SKILL_NAME, this.event.request.intent.slots.bodypart.value + 'Dieser Körperteil existiert nicht. Versuche es nocheinmal. Welchen Körperteil möchtest du trainieren?');
+            this.response.speak('Dieser Körperteil existiert nicht. Versuche es nocheinmal. Welchen Körperteil möchtest du trainieren?').listen('Welchen Körperteil möchtest du trainieren?');
             this.handler.state = '_NOTEXISTING';
-            this.response.speak('Dieser Körperteil existiert nicht. Versuche es nocheinmal.').listen('Welchen Körperteil möchtest du trainieren?');
-            this.emitWithState(':responseReady');
+            this.emit(':responseReady');
         }
     },
-    'AMAZON.RepeatIntent': function () {
+    'AMAZON.RepeatIntent'() {
 
     },
-    'AMAZON.PauseIntent': function () {
+    'AMAZON.PauseIntent'() {
 
     },
-    'AMAZON.YesIntent': function () {
+    'AMAZON.YesIntent'() {
 
     },
-    'AMAZON.HelpIntent': function () {
+    'AMAZON.HelpIntent'() {
         const speechOutput = message.HELP_MESSAGE;
         const reprompt = message.HELP_REPROMPT;
 
         this.response.speak(speechOutput).listen(reprompt);
         this.emit(':responseReady');
     },
-    'AMAZON.CancelIntent': function () {
+    'AMAZON.CancelIntent'() {
         this.response.speak(message.STOP_MESSAGE);
         this.emit(':responseReady');
     },
-    'AMAZON.StopIntent': function () {
+    'AMAZON.StopIntent'() {
         this.response.speak(message.STOP_MESSAGE);
         this.emit(':responseReady');
     }
-
 }
 
 

@@ -15,12 +15,12 @@ module.exports = {
         var bodypart_valid;
         var filledSlots = '';
         var handler_state;
-        var params = {
-            TableName: 'handler_states',
-              Key: {
-                'handler_states_id' : '0'
-              }
-        }
+        // var params = {
+        //     TableName: 'handler_states',
+        //       Key: {
+        //         'handler_states_id' : '0'
+        //       }
+        // }
         
         // dynamoFunctions.readDynamoItem(params, state=>{
         //     level_state = state;
@@ -53,23 +53,35 @@ module.exports = {
 
 
             excersiceName = exercArr[exercArrIdx];
-           
             
             console.log("GET EXERCISE OUT OF JSON >>>>>>>>>>>>>>>>>>>>>" + JSON.stringify(bodypartExercisesJSON[bodypart_valid][excersiceName]));
-
             if (bodypartExercisesJSON[bodypart_valid][excersiceName] != undefined) {
                 console.log("Bodypart EXISTS and is going to be outputed");
                 const speechOutput = "Dein Training ist "+bodypartExercisesJSON[bodypart_valid][excersiceName].PrintName+". Wiederhole diese "+bodypartExercisesJSON[bodypart_valid][excersiceName].Repetitions;
                 this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
                 this.response.speak(speechOutput);
-                this.handler.state = this.handler.state -1;
                 this.emit(':responseReady');
             } 
         }
         else {
-            this.handler.state = '_NOTEXISTING';
-            filledSlots = dialogue.delegateSlotCollection.call(this);
-            this.emit(":delegate", 'Dieser Körperteil existiert nicht. Versuche es nocheinmal.');
+            this.response.cardRenderer(message.SKILL_NAME, this.event.request.intent.slots.bodypart.value + 'Dieser Körperteil existiert nicht. Versuche es nocheinmal. Welchen Körperteil möchtest du trainieren?');
+            this.response.speak('Dieser Körperteil existiert nicht. Versuche es nocheinmal. Welchen Körperteil möchtest du trainieren?').listen('Welchen Körperteil möchtest du trainieren?');
+            this.handler.state = '_EXERSICE';
+            this.emit(':responseReady');        
         }
+    },
+    'Unhandled'() {
+        if (this.handler.state) {
+            this.response.speak(message.HELP_MESSAGE + 'IN NOT EXISTING HANDLER').listen(message.HELP_MESSAGE);
+            // pass to state specific 'Unhandled' handler
+            this.emit(':responseReady');
+          } else {
+            // default 'Unhandled' handling
+            this.emit(':ask', message.HELP_MESSAGE, message.HELP_MESSAGE);
+          }
+    },
+    'AMAZON.StopIntent': function () {
+        this.response.speak(message.STOP_MESSAGE);
+        this.emit(':responseReady');
     }
 }
