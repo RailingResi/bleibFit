@@ -1,278 +1,291 @@
 {
-  "interactionModel": {
-    "languageModel": {
-      "invocationName": "theresas fitness app",
-      "intents": [
-        {
-          "name": "AMAZON.CancelIntent",
-          "samples": [
-            "ich möchte aufhören",
-            "aufhören",
-            "Training beenden",
-            "Beenden"
-          ]
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "theresas fitness app",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": [
+                        "ich möchte aufhören",
+                        "aufhören",
+                        "Training beenden",
+                        "Beenden"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "ich brauche hilfe",
+                        "hilfe"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": [
+                        "halt",
+                        "stop"
+                    ]
+                },
+                {
+                    "name": "AMAZON.RepeatIntent",
+                    "samples": [
+                        "Was",
+                        "bitte sage das noch einmal",
+                        "nicht verstanden",
+                        "ich habe dich nicht verstanden ",
+                        "noch einmal sagen",
+                        "wiederholen"
+                    ]
+                },
+                {
+                    "name": "AMAZON.PauseIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": [
+                        "das ist richtig",
+                        "Richtig",
+                        "Natürlich",
+                        "Sicher",
+                        "Jawohl",
+                        "Ja"
+                    ]
+                },
+                {
+                    "name": "ExerciseIntent",
+                    "slots": [
+                        {
+                            "name": "bodypart",
+                            "type": "bodypartSlot",
+                            "samples": [
+                                "meinen {bodypart}",
+                                "am besten meinen {bodypart}",
+                                "am besten meine {bodypart}",
+                                "{trainieren} {bodypart}",
+                                "lass uns {bodypart} {trainieren}",
+                                "ich will {bodypart} {trainieren}",
+                                "ich will meinen {bodypart} trainieren",
+                                "ich will meine {bodypart} trainieren",
+                                "am besten mein {bodypart}",
+                                "meine {bodypart}",
+                                "mein {bodypart}",
+                                "{bodypart}"
+                            ]
+                        },
+                        {
+                            "name": "trainieren",
+                            "type": "trainingSlot",
+                            "samples": [
+                                "schlage mir ein Training vor",
+                                "starte das Training",
+                                "lasse uns trainieren",
+                                "ich möchte beginnen zu trainieren"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "ich will meinen {bodypart} trainieren",
+                        "ich will meine {bodypart} trainieren",
+                        "meinen {bodypart}",
+                        "meine {bodypart}",
+                        "welches training ich machen könnte",
+                        "ich will meinen Bauch trainieren",
+                        "{bodypart}",
+                        "{trainieren}",
+                        "ich möchte {bodypart} {trainieren}",
+                        "{trainieren} {bodypart}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "bodypartSlot",
+                    "values": [
+                        {
+                            "id": "rücken",
+                            "name": {
+                                "value": "Rücken",
+                                "synonyms": [
+                                    "Rücken Muskulatur",
+                                    "Wirbelsäule",
+                                    "Rückgrat",
+                                    "Kreuz",
+                                    "Rückgrad"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "arm",
+                            "name": {
+                                "value": "Arm",
+                                "synonyms": [
+                                    "Trizeps",
+                                    "Bizeps",
+                                    "Schultern",
+                                    "Unterarm",
+                                    "Oberarm",
+                                    "Brust"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "bauch",
+                            "name": {
+                                "value": "Bauch",
+                                "synonyms": [
+                                    "Abs",
+                                    "Core",
+                                    "Seitlichebauchmuskeln",
+                                    "Bauchmuskeln",
+                                    "Belly"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "hintern",
+                            "name": {
+                                "value": "Hintern",
+                                "synonyms": [
+                                    "Pomuskulatur",
+                                    "Butt",
+                                    "Ass",
+                                    "Arsch",
+                                    "Po"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "beine",
+                            "name": {
+                                "value": "Beine",
+                                "synonyms": [
+                                    "Oberschenkelmuskulatur",
+                                    "Füße",
+                                    "Oberschenkel",
+                                    "Haxen"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "trainingSlot",
+                    "values": [
+                        {
+                            "id": "train",
+                            "name": {
+                                "value": "trainieren",
+                                "synonyms": [
+                                    "fitter werden",
+                                    "fit bleiben",
+                                    "bewegen",
+                                    "aktivieren",
+                                    "exercise",
+                                    "dehnen",
+                                    "betätigen",
+                                    "abmühen",
+                                    "kräftigen",
+                                    "drillen",
+                                    "schinden",
+                                    "sportlich betätigen",
+                                    "anstrengen",
+                                    "probieren",
+                                    "üben",
+                                    "lernen"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "training",
+                            "name": {
+                                "value": "Training",
+                                "synonyms": [
+                                    "Fitness steigern",
+                                    "Anstrengung",
+                                    "Bewegung",
+                                    "Coach",
+                                    "Kurs",
+                                    "Turnen",
+                                    "Fitnesstraining",
+                                    "Leibesübung",
+                                    "Workout",
+                                    "Coaching",
+                                    "Übung"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
         },
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": [
-            "ich brauche hilfe",
-            "hilfe"
-          ]
+        "dialog": {
+            "intents": [
+                {
+                    "name": "ExerciseIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "bodypart",
+                            "type": "bodypartSlot",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.470869105580.24874554309",
+                                "elicitation": "Elicit.Slot.1421064436695.1232511755537"
+                            }
+                        },
+                        {
+                            "name": "trainieren",
+                            "type": "trainingSlot",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                }
+            ]
         },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": [
-            "halt",
-            "stop"
-          ]
-        },
-        {
-          "name": "AMAZON.RepeatIntent",
-          "samples": [
-            "Was",
-            "bitte sage das noch einmal",
-            "nicht verstanden",
-            "ich habe dich nicht verstanden ",
-            "noch einmal sagen",
-            "wiederholen"
-          ]
-        },
-        {
-          "name": "AMAZON.PauseIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.YesIntent",
-          "samples": [
-            "das ist richtig",
-            "Richtig",
-            "Natürlich",
-            "Sicher",
-            "Jawohl",
-            "Ja"
-          ]
-        },
-        {
-          "name": "ExerciseIntent",
-          "slots": [
+        "prompts": [
             {
-              "name": "trainieren",
-              "type": "trainingSlot",
-              "samples": [
-                "starte das Training",
-                "lasse uns trainieren",
-                "ich möchte beginnen zu trainieren",
-              ]
+                "id": "Elicit.Slot.1421064436695.1232511755537",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Welchen Körperteil möchtest du trainieren?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Was möchtest du trainieren?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Bitte sage mir noch kurz welchen Körperteil du trainieren möchtest?"
+                    }
+                ]
             },
             {
-              "name": "bodypart",
-              "type": "bodypartSlot",
-              "samples": [
-                "meinen {bodypart} trainieren",
-                "am besten meinen {bodypart}",
-                "am besten meine {bodypart}",
-                "{trainieren} {bodypart}",
-                "lass uns {bodypart} {trainieren}",
-                "ich möchte {bodypart} {trainieren}",
-                "ich möchte meinen {bodypart} {trainieren}",
-                "ich möchte meine {bodypart} {trainieren}",
-                "am besten mein {bodypart}",
-                "meine {bodypart}",
-                "mein {bodypart}",
-                "{bodypart}"
-              ]
+                "id": "Confirm.Slot.470869105580.24874554309",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Alles klar, du möchtest ein {bodypart} Workout machen, stimmts?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Ok, habe ich das richtig verstanden du möchtest ein {bodypart} Workout machen ?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Du möchtest {bodypart} Übungen machen, richtig?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Du möchtest {bodypart} Training machen , richtig?"
+                    }
+                ]
             }
-          ],
-          "samples": [
-            "meinen {bodypart}",
-            "sage mir welches training ich machen könnte",
-            "ich möchte {bodypart} trainieren",
-            "{bodypart}"
-          ]
-        }
-      ],
-      "types": [
-        {
-          "values": [
-            {
-              "id": "rücken",
-              "name": {
-                "value": "Rücken",
-                "synonyms": [
-                  "Rückenmuskulatur",
-                  "Wirbelsäule",
-                  "Rückgrat",
-                  "Kreuz",
-                  "Rückgrad",
-                  "meinen Rücken"
-                ]
-              }
-            },
-            {
-              "id": "arm",
-              "name": {
-                "value": "Arm",
-                "synonyms": [
-                  "Trizeps",
-                  "Bizeps",
-                  "Schultern",
-                  "Unterarm",
-                  "Oberarm",
-                  "Brust",
-                  "meine Arme"
-                ]
-              }
-            },
-            {
-              "id": "bauch",
-              "name": {
-                "value": "Bauch",
-                "synonyms": [
-                  "Abs",
-                  "Core",
-                  "Seitlichebauchmuskeln",
-                  "Bauchmuskeln",
-                  "Belly",
-                  "meinen Bauch"
-                ]
-              }
-            },
-            {
-              "id": "hintern",
-              "name": {
-                "value": "Hintern",
-                "synonyms": [
-                  "Pomuskulatur",
-                  "Butt",
-                  "Ass",
-                  "Arsch",
-                  "Po",
-                  "meinen Hintern"
-                ]
-              }
-            },
-            {
-              "id": "beine",
-              "name": {
-                "value": "Beine",
-                "synonyms": [
-                  "Oberschenkelmuskulatur",
-                  "Füße",
-                  "Oberschenkel",
-                  "Haxen",
-                  "meine Beine"
-                ]
-              }
-            }
-          ],
-          "name": "bodypartSlot"
-        },
-        {
-          "values": [
-            {
-              "id": "train",
-              "name": {
-                "value": "trainieren",
-                "synonyms": [
-                  "bewegen",
-                  "aktivieren",
-                  "dehnen",
-                  "betätigen",
-                  "kräftigen",
-                  "schinden",
-                  "sportlich betätigen"
-                ]
-              }
-            },
-            {
-              "id": "training",
-              "name": {
-                "value": "Training",
-                "synonyms": [
-                  "Fitness steigern",
-                  "Anstrengung",
-                  "Bewegung",
-                  "Coach",
-                  "Kurs",
-                  "Turnen",
-                  "Fitnesstraining",
-                  "Leibesübung",
-                  "Workout",
-                  "Coaching",
-                  "Übung"
-                ]
-              }
-            }
-          ],
-          "name": "trainingSlot"
-        }
-      ]
-    },
-    "dialog": {
-      "intents": [
-        {
-          "name": "ExerciseIntent",
-          "confirmationRequired": false,
-          "slots": [
-            {
-              "name": "trainieren",
-              "type": "trainingSlot",
-              "elicitationRequired": false,
-              "confirmationRequired": false
-            },
-            {
-              "name": "bodypart",
-              "type": "bodypartSlot",
-              "elicitationRequired": true,
-              "confirmationRequired": true,
-              "prompts": {
-                "elicitation": "Elicit.Slot.1421064436695.1232511755537",
-                "confirmation": "Confirm.Slot.470869105580.24874554309"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    "prompts": [
-      {
-        "id": "Elicit.Slot.1421064436695.1232511755537",
-        "variations": [
-          {
-            "type": "PlainText",
-            "value": "Welchen Körperteil möchtest du trainieren?"
-          },
-          {
-            "type": "PlainText",
-            "value": "Was möchtest du trainieren?"
-          },
-          {
-            "type": "PlainText",
-            "value": "Bitte sage mir noch kurz welchen Körperteil du trainieren möchtest?"
-          }
         ]
-      },
-      {
-        "id": "Confirm.Slot.470869105580.24874554309",
-        "variations": [
-          {
-            "type": "PlainText",
-            "value": "Alles klar, du möchtest ein {bodypart} Workout machen, stimmts?"
-          },
-          {
-            "type": "PlainText",
-            "value": "Ok, habe ich das richtig verstanden du möchtest ein {bodypart} Workout machen ?"
-          },
-          {
-            "type": "PlainText",
-            "value": "Du möchtest {bodypart} Übungen machen, richtig?"
-          },
-          {
-            "type": "PlainText",
-            "value": "Du möchtest {bodypart} Training machen , richtig?"
-          }
-        ]
-      }
-    ]
-  }
+    }
 }

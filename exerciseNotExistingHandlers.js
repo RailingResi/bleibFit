@@ -7,24 +7,6 @@ const bodypartExercisesJSON = training_data.BODYPART_EXERCISES;
 
 
 module.exports = {
-    'Unhandled'() {
-        if (this.handler.state) {
-            // pass to state specific 'Unhandled' handler
-            this.emitWithState('Unhandled');
-          } else {
-            // default 'Unhandled' handling
-            this.emit(':ask', message.HELP_MESSAGE, message.HELP_MESSAGE);
-          }
-    },
-    'LaunchRequest': function () {
-        var speechOutput = message.LAUNCH_MESSAGE;
-        const repromptOutput = message.LAUNCH_MESSAGE_REPROMPT;
-        speechOutput = speechOutput;
-
-        this.response.cardRenderer(message.SKILL_NAME, speechOutput);
-        this.response.speak(speechOutput).listen(repromptOutput);
-        this.emit(':responseReady');
-    },
     'ExerciseIntent': function () {
         var uebungIndex = '';
         var randomExercise = '';
@@ -86,35 +68,8 @@ module.exports = {
         }
         else {
             this.handler.state = '_NOTEXISTING';
-            this.response.speak('Dieser Körperteil existiert nicht. Versuche es nocheinmal.').listen('Welchen Körperteil möchtest du trainieren?');
-            this.emitWithState(':responseReady');
+            filledSlots = dialogue.delegateSlotCollection.call(this);
+            this.emit(":delegate", 'Dieser Körperteil existiert nicht. Versuche es nocheinmal.');
         }
-    },
-    'AMAZON.RepeatIntent': function () {
-
-    },
-    'AMAZON.PauseIntent': function () {
-
-    },
-    'AMAZON.YesIntent': function () {
-
-    },
-    'AMAZON.HelpIntent': function () {
-        const speechOutput = message.HELP_MESSAGE;
-        const reprompt = message.HELP_REPROMPT;
-
-        this.response.speak(speechOutput).listen(reprompt);
-        this.emit(':responseReady');
-    },
-    'AMAZON.CancelIntent': function () {
-        this.response.speak(message.STOP_MESSAGE);
-        this.emit(':responseReady');
-    },
-    'AMAZON.StopIntent': function () {
-        this.response.speak(message.STOP_MESSAGE);
-        this.emit(':responseReady');
     }
-
 }
-
-
