@@ -50,7 +50,7 @@ module.exports = {
             //create random index
             //uebungIndex = Math.floor(Math.random() * exercArr.length);
             //randomExercise = exercArr[uebungIndex];
-
+            
 
             excersiceName = exercArr[exercArrIdx];
             

@@ -3,7 +3,8 @@ const message = require('./messages');
 const dialogue = require('./dialogue');
 const validation = require('./validation');
 const training_data = require('./training_data');
-const bodypartExercisesJSON = training_data.BODYPART_EXERCISES;
+const bodypartExercises = training_data.BODYPART_EXERCISES;
+let userLevel;
 
 
 module.exports = {
@@ -17,67 +18,76 @@ module.exports = {
           }
     },
     'ExerciseIntent'() {
-        var uebungIndex = '';
-        var randomExercise = '';
-        var level_state = '';
+        var levelState = '';
         var exercArr = [];
-        var bodypart_valid;
+        var arrayIdx;
+        var bodypartValid;
         var filledSlots = '';
-        var handler_state;
+
         var params = {
-            TableName: 'handler_states',
-              Key: {
-                'handler_states_id' : '0'
-              }
-        }
-        
-        // dynamoFunctions.readDynamoItem(params, state=>{
-        //     level_state = state;
-        // });
+          TableName : 'fitnessappDB',
+          Key: {
+            userId: this.event.session.user.userId,
+            sessionId: this.event.session.sessionId
+          }
+        };
 
+        //GET CURRENT STATE OUT OF THE DATABASE
+        dynamoFunctions.readDynamoItem(params, Item=>{
+            //get level state out of dynamo db, is 0 in the first round
+            levelState = Item.user_level; 
+            console.log(levelState + 'LEVEL STATE');
+
+            //the actual state defines userLevel and the first exercise in the array
+            userLevel = levelState;
+            arrayIdx = levelState;
+
+            //after finishing this level user gets into a new level this can be safed in the db immediately.has to be done somewhere else. 
+        });
+
+        //collected slot values for the dialogue
         filledSlots = dialogue.delegateSlotCollection.call(this);
-        bodypart_valid = validation.isSlotValid(this.event.request, "bodypart");
+        //does the bodypart value exsist in my training_data.js
+        bodypartValid = validation.isSlotValid(this.event.request, "bodypart");
 
-        console.log('FILLED SLOTS'+ JSON.stringify(filledSlots));
-        if (filledSlots && bodypart_valid) {
-            if (bodypartExercisesJSON[bodypart_valid]) {
+        // if choosen bodypart does not exsist the intent starts again. 
+        if (filledSlots && bodypartValid) {
+            if (bodypartExercises[bodypartValid]) {
                 //create array with all existing excersices for the bodypart
-                for(var k in bodypartExercisesJSON[bodypart_valid]) {
+                for(var k in bodypartExercises[bodypartValid]) {
                     exercArr.push(k);
                 }
             }
 
-            // if (this.handler.state == ''){
-            //     this.handler.state = exercArr.length; 
-            // }
+            //define rounds the user has to pass, depends on amount of existing exersises
+            let lastLevel = exercArr.length - 1; 
 
-             // console.log('this handler stat' + this.handler.state);
-
-
-            exercArrIdx = 1;
-
-            //create random index
-            //uebungIndex = Math.floor(Math.random() * exercArr.length);
-            //randomExercise = exercArr[uebungIndex];
-
-
-            excersiceName = exercArr[exercArrIdx];
+            // userLevel = userLevel + 1; here somehow the user level needs to be set new!
+            excersiceName = exercArr[arrayIdx];
            
-            
-            console.log("GET EXERCISE OUT OF JSON >>>>>>>>>>>>>>>>>>>>>" + JSON.stringify(bodypartExercisesJSON[bodypart_valid][excersiceName]));
+            if (bodypartExercises[bodypartValid][excersiceName] != undefined) {
+                console.log(JSON.stringify(this.attributes) + 'EXERCISE HANDLER ATRIBUTES');
 
-            if (bodypartExercisesJSON[bodypart_valid][excersiceName] != undefined) {
-                const speechOutput = "Dein Training ist "+bodypartExercisesJSON[bodypart_valid][excersiceName].PrintName+". Wiederhole diese "+bodypartExercisesJSON[bodypart_valid][excersiceName].Repetitions;
-                this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
-                this.response.speak(speechOutput);
-                this.handler.state = this.handler.state -1;
+                if (userLevel <= lastLevel){
+                    const speechOutput = "Dein Training ist "+bodypartExercises[bodypartValid][excersiceName].PrintName+". Wiederhole diese "+bodypartExercises[bodypartValid][excersiceName].Repetitions;
+                    const nextPrompt = "Sage Next wenn du fertig bist!";
+                    this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
+                    this.response.speak(speechOutput).listen(nextPrompt);     
+                } else {
+                    const speechOutput = "Du hast dein Training geschafft";
+                    const nextPrompt = "Sage Evaluierung, um das Training zu bewerten!";
+                    this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
+                    this.response.speak(speechOutput);     
+
+                }
+                this.handler.state = '_EXISTING';
                 this.emit(':responseReady');
             } 
         }
         else {
             this.response.cardRenderer(message.SKILL_NAME, this.event.request.intent.slots.bodypart.value + 'Dieser Körperteil existiert nicht. Versuche es nocheinmal. Welchen Körperteil möchtest du trainieren?');
             this.response.speak('Dieser Körperteil existiert nicht. Versuche es nocheinmal. Welchen Körperteil möchtest du trainieren?').listen('Welchen Körperteil möchtest du trainieren?');
-            this.handler.state = '_NOTEXISTING';
+            this.handler.state = '_EXISTING';
             this.emit(':responseReady');
         }
     },
