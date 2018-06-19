@@ -11,7 +11,6 @@
     exports.handler = function (event, context, callback) {
         const alexa = Alexa.handler(event, context, callback);
         alexa.appId = APP_ID;
-        //alexa.dynamoDBTableName = 'handler_states'; // creates new table for session.attributes
         alexa.registerHandlers(newSessionHandler, exersiceHandler, exersiceNotExsitingHandler);
         alexa.execute();
     };

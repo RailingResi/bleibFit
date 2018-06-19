@@ -59,6 +59,7 @@
                             "name": "bodypart",
                             "type": "bodypartSlot",
                             "samples": [
+                                "Next",
                                 "meinen {bodypart}",
                                 "am besten meinen {bodypart}",
                                 "am besten meine {bodypart}",
@@ -77,6 +78,7 @@
                             "name": "trainieren",
                             "type": "trainingSlot",
                             "samples": [
+                                "Next",
                                 "schlage mir ein Training vor",
                                 "starte das Training",
                                 "lasse uns trainieren",
@@ -85,6 +87,7 @@
                         }
                     ],
                     "samples": [
+                        "Next",
                         "ich will meinen {bodypart} trainieren",
                         "ich will meine {bodypart} trainieren",
                         "meinen {bodypart}",
