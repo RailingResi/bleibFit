@@ -17,12 +17,15 @@ module.exports = {
             this.emit(':ask', message.HELP_MESSAGE, message.HELP_MESSAGE);
           }
     },
-    'ExerciseIntent'() {
-        var levelState = '';
-        var exercArr = [];
-        var arrayIdx;
+    'WorkoutIntent'() {
+        
         var bodypartValid;
-        var filledSlots = '';
+        var excersiceName;
+        var levelState;
+        var lastLevel;
+        var exercArr;
+
+        console.log('In workout intent');
 
         var params = {
           TableName : 'fitnessappDB',
@@ -33,27 +36,33 @@ module.exports = {
         };
 
         //GET CURRENT STATE OUT OF THE DATABASE
-        dynamoFunctions.readDynamoItem(params, Item => {  
+        dynamoFunctions.readDynamoItem(params, Item=>{  
+            //the actual state defines userLevel and the first exercise in the array
             
-            filledSlots = dialogue.delegateSlotCollectionBodypart.call(this);
-            //does the bodypart value exsist in my training_data.js
-            bodypartValid = validation.isSlotValid(this.event.request, "bodypart");
-
-            if (filledSlots && bodypartValid) {
+            // var nextLevel = (parseInt(levelState) + 1).toString();
+          
+            console.log(typeof(Item.bodypart)+' : '+Item.bodypart+' '+typeof(Item.bodyExe)+': '+Item.bodyExe);
                 
-                if (bodypartExercises[bodypartValid]) {
-                    //create array with all existing excersices for the bodypart
-                    for(var k in bodypartExercises[bodypartValid]) {
-                        exercArr.push(k);
-                    }
-                }
+            bodypartValid = Item.bodypart;
+            levelState = Item.user_level;
+            exercArr = Item.bodyExe;
 
+            userLevel = levelState;
+            nextLevel = levelState + 1;
+            lastLevel = exercArr.length - 1; 
+            excersiceName = exercArr[userLevel];
+
+            console.log( exercArr.length + 'LENGHT OF ARRAY');  
+            console.log( userLevel + 'USER LEVEL');
+            console.log( lastLevel + 'Last LEVEL');
+
+            if (userLevel <= lastLevel) {
                 var params = {
                   TableName : 'fitnessappDB',
                      Item: {
                         userId: Item.userId,
                         sessionId: Item.sessionId,
-                        user_level: 0,
+                        user_level: nextLevel,
                         bodypart: bodypartValid,
                         bodyExe: exercArr
                       }
@@ -62,32 +71,24 @@ module.exports = {
                 dynamoFunctions.putDynamoItem(params, data=>{
                     console.log(JSON.stringify(data));
                 });
-
-            } else {
-                this.response.cardRenderer(message.SKILL_NAME, this.event.request.intent.slots.bodypart.value + 'Dieser Körperteil existiert nicht. Versuche es nocheinmal. Welchen Körperteil möchtest du trainieren?');
-                this.response.speak('Dieser Körperteil existiert nicht. Versuche es nocheinmal. Welchen Körperteil möchtest du trainieren?').listen('Welchen Körperteil möchtest du trainieren?');
-                this.emit(':responseReady');
             }
 
-            //after finishing this level user gets into a new level this can be safed in the db immediately.has to be done somewhere else. 
-
-            // if choosen bodypart does not exsist the intent starts again. 
-            if (bodypartValid) {
-
-                var speechOutput = "Gute Wahl! Du hast dich für ein "+ bodypartValid +" Training entschieden. ";
-                speechOutput = speechOutput +  "Es warten "+ exercArr.length +" Übungen auf dich! ";
-
-                for ( name in exercArr ){
-                    speechOutput = speechOutput + exercArr[name] + '. ';
-                }
-
-                speechOutput = speechOutput +  "Wenn du bereit bist das Workout zu starten sage: 'Workout Starten'";
-                const nextPrompt = "Sage  'Workout Starten' wenn du bereit bist.";
+            if (userLevel <= lastLevel){
+                var speechOutput = "Bei der " + nextLevel + ". Übung machen wir " + bodypartExercises[bodypartValid][excersiceName].PrintName+". Bei dieser Übung ist ";
+                speechOutput = speechOutput + bodypartExercises[bodypartValid][excersiceName].Desctription;
+                speechOutput = speechOutput + " Wiederhole diese Übung "+bodypartExercises[bodypartValid][excersiceName].Repetitions + ". Sage nächste Übung wenn du fertig bist!";
+                const nextPrompt = "Sage nächste Übung wenn du fertig bist!";
+                this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
+                this.response.speak(speechOutput).listen(nextPrompt);     
+            } else {
+                const speechOutput = "Du hast dein Training geschafft. Sage Evaluierung, um dein Training zu bewerten!";
+                const nextPrompt = "Sage Evaluierung, um deine Trainingsleistung zu bewerten!";
+                this.handler.state = "_EVALUATION";
                 this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
                 this.response.speak(speechOutput).listen(nextPrompt);
-                this.handler.state = '_WORKOUT';
-                this.emit(':responseReady');
             }
+            this.emit(':responseReady');
+
         });
     },
     'AMAZON.RepeatIntent'() {

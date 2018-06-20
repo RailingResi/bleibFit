@@ -53,21 +53,28 @@
                     ]
                 },
                 {
+                    "name": "WorkoutIntent",
+                    "slots": [],
+                    "samples": [
+                        "Workout Starten",
+                        "Nächste Übung"
+                    ]
+                },
+                {
                     "name": "ExerciseIntent",
                     "slots": [
                         {
                             "name": "bodypart",
                             "type": "bodypartSlot",
                             "samples": [
-                                "Next",
                                 "meinen {bodypart}",
                                 "am besten meinen {bodypart}",
                                 "am besten meine {bodypart}",
                                 "{trainieren} {bodypart}",
                                 "lass uns {bodypart} {trainieren}",
-                                "ich will {bodypart} {trainieren}",
-                                "ich will meinen {bodypart} trainieren",
-                                "ich will meine {bodypart} trainieren",
+                                "ich möchte {bodypart} {trainieren}",
+                                "ich möchte meinen {bodypart} {trainieren}",
+                                "ich möchte meine {bodypart} {trainieren}",
                                 "am besten mein {bodypart}",
                                 "meine {bodypart}",
                                 "mein {bodypart}",
@@ -78,7 +85,6 @@
                             "name": "trainieren",
                             "type": "trainingSlot",
                             "samples": [
-                                "Next",
                                 "schlage mir ein Training vor",
                                 "starte das Training",
                                 "lasse uns trainieren",
@@ -87,17 +93,40 @@
                         }
                     ],
                     "samples": [
-                        "Next",
-                        "ich will meinen {bodypart} trainieren",
-                        "ich will meine {bodypart} trainieren",
                         "meinen {bodypart}",
-                        "meine {bodypart}",
                         "welches training ich machen könnte",
-                        "ich will meinen Bauch trainieren",
+                        "ich möchte meinen Bauch trainieren",
                         "{bodypart}",
                         "{trainieren}",
                         "ich möchte {bodypart} {trainieren}",
                         "{trainieren} {bodypart}"
+                    ]
+                },
+                {
+                    "name": "EvaluationIntent",
+                    "slots": [
+                        {
+                            "name": "evaluateTechnique",
+                            "type": "evaluationTechniqueSlot",
+                            "samples": [
+                                "ausgezeichnet",
+                                "gar nicht",
+                                "schlecht",
+                                "mittel gut"
+                            ]
+                        },
+                        {
+                            "name": "evaluateExhausting",
+                            "type": "evaluationExhaustingSlot",
+                            "samples": [
+                                "sehr anstregend",
+                                "mittel",
+                                "gar nicht anstregend"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "Evaluierung"
                     ]
                 }
             ],
@@ -110,7 +139,7 @@
                             "name": {
                                 "value": "Rücken",
                                 "synonyms": [
-                                    "Rücken Muskulatur",
+                                    "Rückenmuskulatur",
                                     "Wirbelsäule",
                                     "Rückgrat",
                                     "Kreuz",
@@ -219,6 +248,61 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "evaluationTechniqueSlot",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "mittel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ausgezeichnet"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sehr gut"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "schlecht"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gut"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "evaluationExhaustingSlot",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "mittel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "zu leicht"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "anstrengend"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sehr anstrengend"
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -245,6 +329,31 @@
                             "confirmationRequired": false,
                             "elicitationRequired": false,
                             "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "EvaluationIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "evaluateTechnique",
+                            "type": "evaluationTechniqueSlot",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.485474712600.222912185555"
+                            }
+                        },
+                        {
+                            "name": "evaluateExhausting",
+                            "type": "evaluationExhaustingSlot",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.485474712600.243705635324"
+                            }
                         }
                     ]
                 }
@@ -286,6 +395,24 @@
                     {
                         "type": "PlainText",
                         "value": "Du möchtest {bodypart} Training machen , richtig?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.485474712600.222912185555",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Wie gut konntest du deine Technik bei diesem Training durchführen, schlecht, ausgezeichnet oder eher mittel gut ?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.485474712600.243705635324",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Wie anstrengend war dieses Training für dich, sehr anstregend, mittel oder gar nicht anstrengend?"
                     }
                 ]
             }

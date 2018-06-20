@@ -42,13 +42,13 @@ module.exports = {
             } 
         },
         "bauch" : {
-            "Bauchpressen": {
-                "PrintName": "Bauchtraining: Bauchpressen",
+            "Situps": {
+                "PrintName": "<say-as interpret-as='interjection'>Situps</say-as>",
                 "Repetitions": "10 mal",
-                "Desctription": "Der Körper ist in Bauchlage. Der Blick auf den Boden gerichtet. Drücke deinen Oberkörper und deine Beine mit deinen Armen vom Boden weg. Schultern, Rücken, Hintern und Beine bilden eine gerade Linie. Langsam wieder senken."
+                "Desctription": "Der Körper in Rückenlage. Der Blick zur Decke gerichtet. Deine Knie sind abgewinkelt und deine Fingerspitzen berühren die Schlefen. Spanne deinen unteren Bauch an, heben deinen gesammten Oberkörper bis zu 45 Grad und senke ihn wieder."
             },
-            "Beine anheben": {
-                "PrintName": "Bauchtraining: Beine anheben",
+            "Beine Heben": {
+                "PrintName": "Bauchtraining: Beine Heben",
                 "Repetitions": "10 mal",
                 "Desctription": "Liege dich auf den Rücken und deine Arme flach neben deinen Oberkörper. Spannen deinen Bauch an und hebe deine ausgestreckten Beine bis sie 90 Grad zu deinem Oberkörper stehen. Senke sie danach langsam wieder mit angespannten Bauch."
             } 
