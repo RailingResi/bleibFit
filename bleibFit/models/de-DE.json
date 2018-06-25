@@ -68,6 +68,8 @@
                             "type": "bodypartSlot",
                             "samples": [
                                 "meinen {bodypart}",
+                                "meine {bodypart}",
+                                "mein {bodypart}",
                                 "am besten meinen {bodypart}",
                                 "am besten meine {bodypart}",
                                 "{trainieren} {bodypart}",
@@ -76,8 +78,6 @@
                                 "ich möchte meinen {bodypart} {trainieren}",
                                 "ich möchte meine {bodypart} {trainieren}",
                                 "am besten mein {bodypart}",
-                                "meine {bodypart}",
-                                "mein {bodypart}",
                                 "{bodypart}"
                             ]
                         },
@@ -94,8 +94,12 @@
                     ],
                     "samples": [
                         "meinen {bodypart}",
+                        "meine {bodypart}",
                         "welches training ich machen könnte",
-                        "ich möchte meinen Bauch trainieren",
+                        "ich möchte bitte meinen {bodypart} trainieren",
+                        "ich möchte meine {bodypart} trainieren",
+                        "ich möchte meinen {bodypart} trainieren bitte",
+                        "ich möchte meine {bodypart} trainieren bitte",
                         "{bodypart}",
                         "{trainieren}",
                         "ich möchte {bodypart} {trainieren}",
@@ -157,7 +161,8 @@
                                     "Schultern",
                                     "Unterarm",
                                     "Oberarm",
-                                    "Brust"
+                                    "Brust",
+                                    "Arme"
                                 ]
                             }
                         },
@@ -191,11 +196,12 @@
                             "id": "beine",
                             "name": {
                                 "value": "Beine",
-                                "synonyms": [
+                                "synonyms": [                                
                                     "Oberschenkelmuskulatur",
                                     "Füße",
                                     "Oberschenkel",
-                                    "Haxen"
+                                    "Haxen",
+                                    "Beine"
                                 ]
                             }
                         }
@@ -412,7 +418,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Wie anstrengend war dieses Training für dich, sehr anstregend, mittel oder gar nicht anstrengend?"
+                        "value": "Wie anstrengend war dieses Training für dich, sehr anstrengend, mittel oder gar nicht anstrengend?"
                     }
                 ]
             }

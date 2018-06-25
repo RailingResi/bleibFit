@@ -5,11 +5,14 @@ const dynamoFunctions = require('./dynamoDB');
 module.exports = {
     'LaunchRequest'() {
         var speechOutput = message.LAUNCH_MESSAGE;
-        const repromptOutput = message.LAUNCH_MESSAGE_REPROMPT;
+        const nextPrompt = message.LAUNCH_MESSAGE_REPROMPT;
+        var d = new Date();
+        d = d.toString();
 
         var params = {
           TableName : 'fitnessappDB',
           Item: {
+            created_at: d,
             userId: this.event.session.user.userId,
             sessionId: this.event.session.sessionId,
             user_level: '0'
@@ -23,19 +26,20 @@ module.exports = {
 
 
         speechOutput = speechOutput;
+        this.attributes.lastSpeechOutput = speechOutput;
+        this.attributes.lastNextPrompt = nextPrompt;
+
         this.handler.state = '_EXERSICE';
         this.response.cardRenderer(message.SKILL_NAME, speechOutput);
-        this.response.speak(speechOutput).listen(repromptOutput);
+        this.response.speak(speechOutput).listen(nextPrompt);
         this.emit(':responseReady');
     }, 
+    'AMAZON.RepeatIntent'() { 
+        this.response.speak('Ich sage dir einfach nocheinmal was ich vorher sagte. '+this.attributes.lastSpeechOutput).listen(this.attributes.lastNextPrompt); 
+        this.emit(':responseReady'); 
+    },
     'Unhandled'() {
-        if (this.handler.state) {
-            // pass to state specific 'Unhandled' handler
-            this.emitWithState('Unhandled');
-          } else {
-            // default 'Unhandled' handling
-            this.emit(':ask', message.HELP_MESSAGE, message.HELP_MESSAGE);
-          }
+        this.emit(':ask', message.HELP_MESSAGE, message.HELP_MESSAGE);
     }
 }
 

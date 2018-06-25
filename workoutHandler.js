@@ -9,13 +9,7 @@ let userLevel;
 
 module.exports = {
     'Unhandled'() {
-        if (this.handler.state) {
-            // pass to state specific 'Unhandled' handler
-            this.emitWithState('Unhandled');
-          } else {
-            // default 'Unhandled' handling
-            this.emit(':ask', message.HELP_MESSAGE, message.HELP_MESSAGE);
-          }
+        this.emit(':ask', message.HELP_MESSAGE, message.HELP_MESSAGE);
     },
     'WorkoutIntent'() {
         
@@ -60,6 +54,7 @@ module.exports = {
                 var params = {
                   TableName : 'fitnessappDB',
                      Item: {
+                        created_at: Item.created_at,
                         userId: Item.userId,
                         sessionId: Item.sessionId,
                         user_level: nextLevel,
@@ -73,27 +68,34 @@ module.exports = {
                 });
             }
 
-            if (userLevel <= lastLevel){
-                var speechOutput = "Bei der " + nextLevel + ". Übung machen wir " + bodypartExercises[bodypartValid][excersiceName].PrintName+". Bei dieser Übung ist ";
-                speechOutput = speechOutput + bodypartExercises[bodypartValid][excersiceName].Desctription;
-                speechOutput = speechOutput + " Wiederhole diese Übung "+bodypartExercises[bodypartValid][excersiceName].Repetitions + ". Sage nächste Übung wenn du fertig bist!";
+            if (userLevel < lastLevel) {
+                var speechOutput = "Bei der " + nextLevel + ". Übung machen wir " + bodypartExercises[bodypartValid][excersiceName].PrintName+"! Wiederhole sie "+bodypartExercises[bodypartValid][excersiceName].Repetitions + ". Bei dieser Übung ist ";
+                speechOutput = speechOutput + bodypartExercises[bodypartValid][excersiceName].Desctription + '. Sage nächste Übung, wenn du fertig bist!';
                 const nextPrompt = "Sage nächste Übung wenn du fertig bist!";
+
+                this.attributes.lastSpeechOutput = speechOutput;
+                this.attributes.lastNextPrompt = nextPrompt;
                 this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
                 this.response.speak(speechOutput).listen(nextPrompt);     
             } else {
-                const speechOutput = "Du hast dein Training geschafft. Sage Evaluierung, um dein Training zu bewerten!";
+                var speechOutput = "Super! Du bist schon sehr weit gekommen. Die " + nextLevel + ". und letzte Übung schaffst du jetzt auch noch. Bei dieser Übung machen wir " + bodypartExercises[bodypartValid][excersiceName].PrintName+"! Wiederhole sie "+bodypartExercises[bodypartValid][excersiceName].Repetitions + ". Bei dieser Übung ist ";
+                speechOutput = speechOutput + bodypartExercises[bodypartValid][excersiceName].Desctription + '. Sage Evaluierung, wenn du fertig bist, um deine Trainingsleistung zu bewerten!';                
                 const nextPrompt = "Sage Evaluierung, um deine Trainingsleistung zu bewerten!";
+
+                this.attributes.lastSpeechOutput = speechOutput;
+                this.attributes.lastNextPrompt = nextPrompt;
                 this.handler.state = "_EVALUATION";
                 this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
                 this.response.speak(speechOutput).listen(nextPrompt);
-            }
+            } 
             this.emit(':responseReady');
 
         });
     },
-    'AMAZON.RepeatIntent'() {
-
-    },
+    'AMAZON.RepeatIntent'() { 
+        this.response.speak('Ich sage dir einfach nocheinmal was ich vorher sagte. '+this.attributes.lastSpeechOutput).listen(this.attributes.lastNextPrompt); 
+        this.emit(':responseReady'); 
+    }, 
     'AMAZON.PauseIntent'() {
 
     },

@@ -18,20 +18,45 @@ module.exports = {
           }
     },
     'EvaluationIntent'() {
-        filledSlots = dialogue.delegateSlotCollectionBodypart.call(this);
-        console.log('ENTERED EVALUATION DATA: '+ this.event);
-        this.response.speak('Danke dass du an diesem Experiement teilgenommen hast. Bitte fülle jetzt noch den Fragebogen aus!');
-        this.emit(':responseReady');
+        
+        filledSlots = dialogue.delegateSlotCollection.call(this);
 
-    },
-    'AMAZON.RepeatIntent'() {
+        var evaluateExhaustingValue = this.event.request.intent.slots.evaluateExhausting.value;
+        var evaluateTechniqueValue = this.event.request.intent.slots.evaluateTechnique.value;
 
-    },
-    'AMAZON.PauseIntent'() {
 
-    },
-    'AMAZON.YesIntent'() {
+        if (evaluateTechniqueValue && evaluateExhaustingValue) {
+             var params = {
+              TableName : 'fitnessappDB',
+              Key: {
+                userId: this.event.session.user.userId,
+                sessionId: this.event.session.sessionId
+              }
+            };
 
+            dynamoFunctions.readDynamoItem(params, Item => {  
+                
+                params = {
+
+                  TableName : 'fitnessappDB',
+                     Item: {
+                        created_at: Item.created_at,
+                        userId: Item.userId,
+                        sessionId: Item.sessionId,
+                        user_level: Item.user_level,
+                        bodypart: Item.bodypart,
+                        bodyExe: Item.bodyExe,
+                        evaluateExhausting: evaluateExhaustingValue,
+                        evaluateTechnique: evaluateTechniqueValue
+                      }
+                  }
+
+                dynamoFunctions.putDynamoItem(params, data=>{
+                    this.response.speak('Danke dass du an diesem Experiment teilgenommen hast. Bitte fülle jetzt noch den Fragebogen aus!');
+                    this.emit(':responseReady');  
+                });
+            });
+        }
     },
     'AMAZON.HelpIntent'() {
         const speechOutput = message.HELP_MESSAGE;

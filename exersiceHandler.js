@@ -35,7 +35,7 @@ module.exports = {
         //GET CURRENT STATE OUT OF THE DATABASE
         dynamoFunctions.readDynamoItem(params, Item => {  
             
-            filledSlots = dialogue.delegateSlotCollectionBodypart.call(this);
+            filledSlots = dialogue.delegateSlotCollection.call(this);
             //does the bodypart value exsist in my training_data.js
             bodypartValid = validation.isSlotValid(this.event.request, "bodypart");
 
@@ -48,9 +48,10 @@ module.exports = {
                     }
                 }
 
-                var params = {
+                params = {
                   TableName : 'fitnessappDB',
                      Item: {
+                        created_at: Item.created_at,
                         userId: Item.userId,
                         sessionId: Item.sessionId,
                         user_level: 0,
@@ -77,12 +78,20 @@ module.exports = {
                 var speechOutput = "Gute Wahl! Du hast dich für ein "+ bodypartValid +" Training entschieden. ";
                 speechOutput = speechOutput +  "Es warten "+ exercArr.length +" Übungen auf dich! ";
 
-                for ( name in exercArr ){
-                    speechOutput = speechOutput + exercArr[name] + '. ';
+
+                for ( idx in exercArr ){
+                    if ( idx < exercArr.length - 1) {
+                         speechOutput = speechOutput + exercArr[idx] + ', ';
+                    } else {
+                         speechOutput = speechOutput + 'und '+ exercArr[idx] + '. ';
+                    }
                 }
 
                 speechOutput = speechOutput +  "Wenn du bereit bist das Workout zu starten sage: 'Workout Starten'";
                 const nextPrompt = "Sage  'Workout Starten' wenn du bereit bist.";
+                this.attributes.lastSpeechOutput = speechOutput;
+                this.attributes.lastNextPrompt = nextPrompt;
+
                 this.response.cardRenderer(this.t('SKILL_NAME'), speechOutput.toString());
                 this.response.speak(speechOutput).listen(nextPrompt);
                 this.handler.state = '_WORKOUT';
@@ -90,8 +99,9 @@ module.exports = {
             }
         });
     },
-    'AMAZON.RepeatIntent'() {
-
+    'AMAZON.RepeatIntent'() { 
+        this.response.speak('Ich sage dir einfach nocheinmal was ich vorher sagte. '+this.attributes.lastSpeechOutput).listen(this.attributes.lastNextPrompt); 
+        this.emit(':responseReady'); 
     },
     'AMAZON.PauseIntent'() {
 
